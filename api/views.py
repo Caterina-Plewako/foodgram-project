@@ -1,3 +1,77 @@
-from django.shortcuts import render
+import json
+from urllib.parse import unquote
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views import View
+from django.views.decorators.http import require_GET
+from recipes.models import Recipe, Ingredient
+from .models import FavoriteRecipe, Subscriptions, Purchase
 
-# Create your views here.
+
+class Favorites(LoginRequiredMixin, View):
+    def post(self, request):
+        recipe_id = json.loads(request.body).get('id', None)
+        if recipe_id is not None:
+            recipe = get_object_or_404(Recipe, id=recipe_id)
+            obj, created = FavoriteRecipe.objects.get_or_create(recipe=recipe, user=request.user)
+
+            if created:
+                return JsonResponse({'success': True})
+            return JsonResponse({'success': False})
+        return JsonResponse({'success': False})
+
+
+    def delete(self, request, recipe_id):
+        recipe = get_object_or_404(FavoriteRecipe, recipe=recipe_id, user=request.user)
+        recipe.delete()
+        return JsonResponse({'success': True})
+
+
+class Subscription(LoginRequiredMixin, View):
+    def post(self, request):
+        author_id = json.loads(request.body).get('id', None)
+        author = get_object_or_404(User, pk=author_id)
+        if author != request.user:
+            obj, created = Subscriptions.objects.get_or_create(author=author, user=request.user)
+
+            if created:
+                return JsonResponse({'success': False})
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': True})
+
+
+    def delete(self, request, author_id):
+        author = get_object_or_404(User, pk=author_id)
+        if author != request.user:
+            subscription = get_object_or_404(Subscriptions, author=author_id, user=request.user)
+            subscription.delete()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False})
+
+
+class Purchases(LoginRequiredMixin, View):
+    def post(self, request):
+        recipe_id = json.loads(request.body).get('id', None)
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+        purchase = Purchases.purchase.get_purchase(user=request.user)
+
+        if not purchase.recipes.filter(id=recipe_id).exists():
+            purchase.recipes.add(recipe)
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False})
+
+
+    def delete(self, request, recipe_id):
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+        purchase = Purchases.purchase.get_purchase(user=request.user)
+        if not purchase.recipes.remove(recipe):
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False})
+
+
+def get_ingredients(request):
+    query = unquote(request.GET.get('query'))
+    data = list(Ingredient.objects.filter(
+        name__icontains=query).values('name', 'unit'))
+    return JsonResponse(data, safe=False)

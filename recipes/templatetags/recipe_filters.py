@@ -1,12 +1,10 @@
+import pymorphy2
 from django import template
-from ..models import FavoriteRecipes
+from api.models import Purchase
 
 register = template.Library()
 
-@register.filter(name='is_favorite')
-def is_favorite(recipe_id, user_id):
-    return FavoriteRecipes.objects.filter(
-        user_id=user_id, recipe_id=recipe_id).exists()
+morph = pymorphy2.MorphAnalyzer()
 
 
 @register.filter
@@ -27,3 +25,14 @@ def formatting_tags(request, tag):
         return result
 
     return tag
+
+
+@register.filter(name='plural_recipes')
+def plural_recipe(number):
+    word = morph.parse('рецепт')[0]
+    return word.make_agree_with_number(number).word
+
+
+@register.filter(name='purchase_list')
+def purchase_list(user_id):
+    return Purchase.purchase.get_purchases_list(user_id)

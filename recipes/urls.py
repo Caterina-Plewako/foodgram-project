@@ -4,14 +4,16 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    # path(r'^tag/(?P<tag_slug>[-\w]+)/$', views.index, name='index_by_tag'),
     path('new/', views.new_recipe, name='new_recipe'),
-    path('follow/', views.follow_index, name='follow_index'),
-    path('favorites', views.add_favorites, name='add_favorites'),
-    path('favorites/<int:id>/', views.delete_favorites, name='delete_favorites'),
+    path('<str:username>/<int:recipe_id>/edit/',
+         views.recipe_edit, name='recipe_edit'),
+    path('<str:username>/<int:recipe_id>/delete/',
+         views.recipe_delete, name='recipe_delete'),
+    path('subscriptions/<str:username>', views.subscriptions, name='subscriptions'),
+    path('favorites/<str:username>', views.favorites, name='favorites'),
     path('<str:username>/', views.profile, name='profile'),
     path('<str:username>/<int:recipe_id>/', views.recipe_view, name='recipe'),
-    path('<str:username>/follow/', views.profile_follow, name='profile_follow'),
-    path('<str:username>/unfollow/',
-         views.profile_unfollow, name='profile_unfollow'),
+    path('purchases_index', views.purchases_list, name='purchases_list'),
+    path('purchases/download_txt/',
+         views.download_shoplist, name='download_shoplist'),
 ]

@@ -23,9 +23,6 @@ class Recipe(models.Model):
     slug = models.SlugField(max_length=50, blank=True)
     image = models.ImageField(upload_to='recipes/', null=True, blank=False) 
     tags = TaggableManager()
-    # breakfast = models.BooleanField(default=False, verbose_name='Завтрак')
-    # lunch = models.BooleanField(default=False, verbose_name='Обед')
-    # dinner = models.BooleanField(default=False, verbose_name='Ужин')
 
     def __str__(self):
         return self.title
@@ -38,18 +35,3 @@ class IngredientForRecipe(models.Model):
     
     def __str__(self):
         return str(self.ingredient) if self.ingredient else ''
-
-
-class FavoriteRecipes(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorites')
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
-
-
-class Follow(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE,
-                             related_name='follower')
-    author = models.ForeignKey(User, on_delete=models.CASCADE,
-                               related_name='following')
-
-    def __str__(self):
-        return f'{self.user}, {self.author}'
