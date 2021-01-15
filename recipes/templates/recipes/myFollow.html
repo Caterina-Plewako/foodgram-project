@@ -1,31 +1,29 @@
-<!doctype html>
-<html lang="en">
+{% extends 'recipes/base.html' %}
 {% load static %}
 {% load recipe_filters %}
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Мои подписки</title>
-    <link rel="stylesheet" href="{% static './pages/myFollow.css' %}">
-</head>
-<body class="body">
-<header class="header">
-    {% include "includes/nav.html" %}
-</header>
-<main class="main container">
+
+{% block title %}
+    Мои подписки
+{% endblock %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{% static '/pages/myFollow.css' %}">
+{% endblock stylesheet %}
+
+{% block content %}
+
     <div class="main__header">
         <h1 class="main__title">Мои подписки</h1>
     </div>
+
     <div class="card-list">
 
         {% for author in page %}
-        <div class="card-user" data-author="{{ author.id }}">
-        <div class="card-user__header">
-            <h2 class="card-user__title">{{ author.username }}</h2>
-        </div>
-        <div class="card-user__body">
+            <div class="card-user" data-author="{{ author.id }}">
+                <div class="card-user__header">
+                    <h2 class="card-user__title">{{ author.username }}</h2>
+                </div>
+            <div class="card-user__body">
 
             {% for recipe in author.recipe_author.all|slice:':3' %}
                 <ul class="card-user__items">
@@ -56,8 +54,9 @@
     {% if page.has_other_pages %}
         {% include "includes/paginator.html" with items=page paginator=paginator %}
     {% endif %}
-</main>
-{% include "includes/footer.html" %}
+
+{% endblock %}
+
 <script src="{% static './js/config/config.js' %}"></script>
 <script src="{% static './js/components/MainCards.js' %}"></script>
 <script src="{% static './js/components/MyFollow.js' %}"></script>
@@ -66,5 +65,3 @@
 <script src="{% static './js/api/Api.js' %}"></script>
 <script src="{% static 'myFollow.js' %}"></script>
 
-</body>
-</html>

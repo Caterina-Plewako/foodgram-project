@@ -1,6 +1,9 @@
-from django.core.management.base import BaseCommand, CommandError
-from recipes.models import Ingredient
 import csv
+
+from django.core.management.base import BaseCommand, CommandError
+
+from recipes.models import Ingredient
+
 
 class Command(BaseCommand):
     help = 'Load ingredients data to database'

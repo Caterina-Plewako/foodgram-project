@@ -1,7 +1,9 @@
 from django import template
-from ..models import FavoriteRecipe, Subscriptions
+
+from ..models import FavoriteRecipe, Subscription
 
 register = template.Library()
+
 
 @register.filter
 def is_favorite(recipe_id, user_id):
@@ -11,5 +13,5 @@ def is_favorite(recipe_id, user_id):
 
 @register.filter
 def is_subscribed(author, user_id):
-    return Subscriptions.objects.filter(
+    return Subscription.objects.filter(
         user=user_id, author=author).exists()

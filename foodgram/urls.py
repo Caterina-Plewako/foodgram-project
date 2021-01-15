@@ -1,7 +1,12 @@
-from django.contrib import admin
-from django.urls import path, include
 from django.conf import settings
+from django.conf.urls import handler404, handler500
 from django.conf.urls.static import static
+from django.contrib import admin
+from django.contrib.flatpages import views
+from django.urls import include, path
+
+handler404 = 'recipes.views.page_not_found'
+handler500 = 'recipes.views.server_error'
 
 urlpatterns = [
     path('', include('api.urls')),
@@ -11,7 +16,14 @@ urlpatterns = [
     path('recipe/', include('recipes.urls')),
 ]
 
+urlpatterns += [
+    path('about-author/', views.flatpage,
+         {'url': '/about-author/'}, name='auth'),
+    path('about-spec/', views.flatpage, {'url': '/about-spec/'}, name='spec'),
+]
 
 if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL,
+                          document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

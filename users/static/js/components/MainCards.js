@@ -12,7 +12,7 @@ class MainCards {
     }
     addEvent() {
         const eventCb = this._access();
-        this.container.addEventListener('click', eventCb)
+        this.container.addEventListener('click', eventCb);
     }
     _access () {
         if(this.userAuth) {

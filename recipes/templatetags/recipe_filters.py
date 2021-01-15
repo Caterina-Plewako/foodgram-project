@@ -1,5 +1,6 @@
 import pymorphy2
 from django import template
+
 from api.models import Purchase
 
 register = template.Library()

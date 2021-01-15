@@ -6,7 +6,8 @@ class Favorites {
 
     addFavorites (target,cardId,callBack) {
         target.setAttribute('disabled', true)
-        this.api.addFavorites(cardId)
+        token = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        this.api.addFavorites(cardId, token)
             .then( e => {
                 target.innerHTML = this.config.active.text;
                 target.removeAttribute(this.config.attr);
