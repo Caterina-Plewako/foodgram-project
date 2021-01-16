@@ -1,54 +1,45 @@
-<!doctype html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+{% extends 'recipes/base.html' %}
 {% load static %}
+{% load user_filter %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Войти на сайт</title>
-    <link rel="stylesheet" href="{% static 'pages/form.css' %}">
-</head>
+{% block title %}
+    Войти на сайт
+{% endblock  %}
 
-<body class="body">
-    <header class="header">
-        {% include "includes/nav.html" %}
-    </header>
-    <main class="main container">
-        <div class="main__header">
-            <h1 class="main__title">Войти на сайт</h1>
+{% block stylesheet %}
+    <link rel="stylesheet" href="{% static '/pages/form.css' %}">
+{% endblock stylesheet %}
+
+{% block content %}
+    <div class="main__header">
+        <h1 class="main__title">Войти на сайт</h1>
+    </div>
+
+    <div class="form-container">
+        <form class="form" method="post" action="">
+        {% csrf_token %}
+        <div class="form__group">
+            <span class="form__error">{{ form.non_field_errors.as_text|escape }}</span>
         </div>
-        <div class="form-container">
-            <form class="form" method="post" action="{% url 'login' %}">
-                {% csrf_token %}
-                <div class="form__group">
-                    <label for="id_username" class="form__label">Имя</label>
-                    <div class="form__field-group">
-                        <input type="text" name="username" id="id_username" class="form__input">
-                        <span class="form__error"></span>
-                    </div>
-                </div>
-                <div class="form__group">
-                    <label for="id_password" class="form__label">Пароль</label>
-                    <div class="form__field-group">
-                        <input type="password" name="password" id="id_password" class="form__input">
-                        {% if form.errors %}
-                        <span class="form__error">Имя пользователя и пароль не совпадают. Введите правильные
-                            данные.</span>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="form__footer">
-                    <button class="button button_style_blue">Войти</button>
-                    <a class="form__forgot-link">Забыли пароль?</a>
-                </div>
-            </form>
-        </div>
+        {% for field in form %}
+            <div class="form__group">
 
+                <label for="{{ field.id_for_label }}" class="form__label">{{ field.label }}</label>
+                <div class="form__field-group">
+                    {{ field|addclass:'form__input' }}
 
-    </main>
-    {% include "includes/footer.html" %}
-</body>
+                    {% if field.errors %}
+                        <span class="form__error">{{ field.errors.as_text|escape }}</span>
+                    {% endif %}
 
-</html>
+                </div>
+            </div>
+        {% endfor %}
+
+            <div class="form__footer">
+                <button type="submit" class="button button_style_blue">Войти</button>
+                <a href="{% url 'password_reset' %}" class="form__forgot-link">Забыли пароль?</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

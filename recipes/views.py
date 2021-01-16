@@ -32,6 +32,7 @@ def index(request):
     )
 
 
+@login_required
 def new_recipe(request):
     form = RecipeForm(request.POST or None)
 
@@ -49,6 +50,7 @@ def new_recipe(request):
     return render(request, 'recipes/formRecipe.html', {'form': form})
 
 
+@login_required
 def recipe_edit(request, recipe_id, username):
     recipe = get_object_or_404(Recipe, pk=recipe_id)
 
@@ -80,8 +82,9 @@ def recipe_edit(request, recipe_id, username):
                   )
 
 
+@login_required
 def recipe_delete(request, recipe_id, username):
-    recipe = get_object_or_404(Recipe, id=recipe_id)
+    recipe = get_object_or_404(Recipe, author__username=username, id=recipe_id)
 
     if request.user != recipe.author:
         return redirect(
@@ -120,6 +123,7 @@ def profile(request, username):
                   )
 
 
+@login_required
 def subscriptions(request, username):
     user = get_object_or_404(User, username=username)
     subscriptions = User.objects.prefetch_related('recipe_author').filter(
@@ -134,6 +138,7 @@ def subscriptions(request, username):
     )
 
 
+@login_required
 def favorites(request, username):
     user = get_object_or_404(User, username=username)
     recipes = Recipe.objects.filter(favourites__user=request.user)
@@ -152,6 +157,7 @@ def favorites(request, username):
     })
 
 
+@login_required
 def purchases_list(request):
     recipes_list = Purchase.purchase.get_purchases_list(request.user)
     return render(request,
@@ -160,6 +166,7 @@ def purchases_list(request):
                   )
 
 
+@login_required
 def download_shoplist(request):
     user = request.user
     filename = f'{user.username}_list.txt'
@@ -175,11 +182,3 @@ def download_shoplist(request):
     response = HttpResponse(content, content_type='text/plain')
     response['Content-Disposition'] = f'attachment; filename={filename}'
     return response
-
-
-def page_not_found(request, exception):
-    return render(request, 'misc/404.html', {'path': request.path}, status=404)
-
-
-def server_error(request):
-    return render(request, 'misc/500.html', status=500)

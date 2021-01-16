@@ -1,6 +1,7 @@
 {% extends 'recipes/base.html' %}
 {% load static %}
 {% load recipe_filters %}
+{% load thumbnail %}
 
 {% block title %}
     Мои подписки
@@ -29,7 +30,7 @@
                 <ul class="card-user__items">
                     <li class="card-user__item">
                         <div class="recipe">
-                            <img src="./images/testCardImg.png" alt="какой-то-текст" class="recipe__image">
+                            <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe__image">
                             <h3 class="recipe__title">{{ recipe.title }}</h3>
                             <p class="recipe__text"><span class="icon-time"></span> {{ recipe.cooking_time }}</p>
                         </div>

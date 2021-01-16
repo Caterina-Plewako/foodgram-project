@@ -8,7 +8,10 @@ SECRET_KEY = 'slg4kr7z&o8a6&d@@wrww!whsb+o*q#3&98i8!($^ewfo9%79t'
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+]
 
 
 INSTALLED_APPS = [
@@ -103,3 +106,5 @@ EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
 ITEMS_FOR_PAGINATOR = 6
+
+SITE_ID = 1
