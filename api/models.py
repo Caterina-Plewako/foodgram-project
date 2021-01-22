@@ -41,14 +41,14 @@ class PurchaseManager(models.Manager):
         try:
             return super().get_queryset().get(user=user)
         except ObjectDoesNotExist:
-            purchase = Purchase(user=user)
+            purchase = Purchase(user=user, recipe=recipe)
             purchase.save()
             return purchase
 
 
 class Purchase(models.Model):
-    recipe = models.ForeignKey(
-        Recipe, on_delete=models.CASCADE, related_name='purchases')
+    recipes = models.ManyToManyField(
+        Recipe, related_name='purchases')
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='purchases')
     purchase = PurchaseManager()

@@ -8,7 +8,7 @@
 {% endblock  %}
 
 {% block stylesheet %}
-    <link rel="stylesheet" href="{% static '/pages/single.css' %}">
+    <link rel="stylesheet" href="{% static 'pages/single.css' %}">
 {% endblock stylesheet %}
 
 {% block content %}
@@ -51,7 +51,7 @@
                 <p class="single-card__text"><span class="icon-time"></span> {{ recipe.cooking_time }} мин.</p>
                 <ul class="single-card__items">
                     <p class="single-card__text"><span class="icon-user"></span> {{ author }}</p>
-                    {% if author == user %}
+                    {% if recipe.author == user %}
                         <li class="single-card__item"> <a style="margin-left: 2.5em"
                                 href="{% url 'recipe_edit' recipe.author.username recipe.id %}"
                                 class="single-card__text">Редактировать рецепт</a></li>
@@ -90,7 +90,11 @@
 
 {% endblock %}
 
+{% block scripts %}
+
 <script src="{% static './js/components/Purchases.js' %}"></script>
+<script src="{% static './js/components/Favorites.js' %}"></script>
+<script src="{% static './js/components/Subscribe.js' %}"></script>
 <script src="{% static './js/config/config.js' %}"></script>
 
 <script src="{% static './js/components/MainCards.js' %}"></script>
@@ -104,3 +108,5 @@
 {% else %}
     <script src="{% static 'singlePageNotAuth.js' %}"></script>
 {% endif %}
+
+{% endblock %}

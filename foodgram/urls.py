@@ -9,11 +9,11 @@ handler404 = 'foodgram.views.page_not_found'
 handler500 = 'foodgram.views.server_error'
 
 urlpatterns = [
+    path('recipe/', include('recipes.urls')),
     path('', include('api.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('users.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('recipe/', include('recipes.urls')),
 ]
 
 urlpatterns += [

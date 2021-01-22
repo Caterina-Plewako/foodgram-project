@@ -19,14 +19,14 @@
 
     <div class="card-list">
 
-        {% for author in page %}
-            <div class="card-user" data-author="{{ author.id }}">
+        {% for subscription in page %}
+            <div class="card-user" data-author="{{ subscription.id }}">
                 <div class="card-user__header">
-                    <h2 class="card-user__title">{{ author.username }}</h2>
+                    <h2 class="card-user__title">{{ subscription.author.username }}</h2>
                 </div>
             <div class="card-user__body">
 
-            {% for recipe in author.recipe_author.all|slice:':3' %}
+            {% for recipe in subscription.author.recipes.all|slice:':3' %}
                 <ul class="card-user__items">
                     <li class="card-user__item">
                         <div class="recipe">
@@ -35,28 +35,30 @@
                             <p class="recipe__text"><span class="icon-time"></span> {{ recipe.cooking_time }}</p>
                         </div>
                     </li>
+                </ul>
             {% endfor %}
-        {% endfor %}
 
-            {% if author.recipe_author.all|length > 3 %}
+            {% if subscription.author.recipes.all|length > 3 %}
                 <li class="card-user__item">
-                    <a href="{% url 'profile' author.username %}" class="card-user__link link">Еще{{ author.recipe_author.all|length|add:'-3'}} {{ author.recipe_author.all|length|add:'-3'|plural_recipes }}...</a>
+                    <a href="{% url 'profile' subscription.author.username %}" class="card-user__link link">Еще {{ subscription.author.recipes.all|length|add:'-3'}} {{ subscription.author.recipes.all|length|add:'-3'|plural_recipes }}...</a>
                 </li>
             {% endif %}
-            </ul>
         </div>
         {% if page %}
             <div class="card-user__footer">
                 <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться</button>
             </div>
         {% endif %}
-
+        {% endfor %}
+        </div>
     </div>
     {% if page.has_other_pages %}
         {% include "includes/paginator.html" with items=page paginator=paginator %}
     {% endif %}
 
 {% endblock %}
+
+{% block scripts %}
 
 <script src="{% static './js/config/config.js' %}"></script>
 <script src="{% static './js/components/MainCards.js' %}"></script>
@@ -66,3 +68,4 @@
 <script src="{% static './js/api/Api.js' %}"></script>
 <script src="{% static 'myFollow.js' %}"></script>
 
+{% endblock %}

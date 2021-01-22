@@ -3,15 +3,16 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Sum
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from taggit.models import Tag
 
-from api.models import Purchase
+from api.models import Purchase, Subscription
 from foodgram.settings import ITEMS_FOR_PAGINATOR
 
 from .forms import RecipeForm
 from .models import IngredientForRecipe, Recipe, User
-from .utils import get_ingredients_from_form, get_tags
+from .utils import get_ingredients_from_form, get_tags, save_recipe
 
 
 def index(request):
@@ -126,8 +127,7 @@ def profile(request, username):
 @login_required
 def subscriptions(request, username):
     user = get_object_or_404(User, username=username)
-    subscriptions = User.objects.prefetch_related('recipe_author').filter(
-        following__user=user.id)
+    subscriptions = Subscription.objects.filter(user=user)
     paginator = Paginator(subscriptions, ITEMS_FOR_PAGINATOR)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
@@ -173,10 +173,10 @@ def download_shoplist(request):
     recipes = Purchase.purchase.get_purchases_list(user).values(
         'ingredients__name', 'ingredients__unit'
     )
-    ingredients = recipes.annotate(Sum('recipe_amounts__amount')).order_by()
+    ingredients = recipes.annotate(Sum('recipeingredient__amount')).order_by()
     products = [
-        (f'{i["ingredients__name"]} ({i["ingredients__unit"]}) -'
-         f' {i["recipe_amounts__amount__sum"]}')
+        (f'{i["ingredients__name"]} -'
+         f' {i["recipeingredient__amount__sum"]} {i["ingredients__unit"]}')
         for i in ingredients]
     content = '\n'.join(products)
     response = HttpResponse(content, content_type='text/plain')
