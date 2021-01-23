@@ -33,7 +33,7 @@ jobs:
        key: ${{ secrets.SSH_KEY }}
        passphrase: ${{ secrets.PASSPHRASE }} 
        script: |
-         sudo docker pull caterinaplevako/yamdb:v1
+         sudo docker pull caterinaplevako/foodgram:v1
          sudo docker-compose stop $(sudo docker ps -a -q)
          sudo docker-compose run --rm -d -p 5000:5000 caterinaplevako/foodgram:v1
  
