@@ -1,4 +1,3 @@
-from django.shortcuts import get_object_or_404
 from taggit.models import Tag
 
 from .models import Ingredient, IngredientForRecipe
@@ -13,19 +12,6 @@ def get_tags(request):
     else:
         tags_qs = False
     return [tags_qs, tags_from_get]
-
-
-# def save_recipe(ingredients, recipe):
-#     recipe_ingredients = []
-
-#     for name, amount in ingredients.items():
-#         ingredient = get_object_or_404(Ingredient, name=name)
-#         rec_ingredient = IngredientForRecipe(
-#             amount=amount, ingredient=ingredient, recipe=recipe
-#         )
-#         recipe_ingredients.append(rec_ingredient)
-
-#     IngredientValue.objects.bulk_create(recipe_ingredients)
 
 
 def get_ingredients(data):
