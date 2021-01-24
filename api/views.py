@@ -3,7 +3,7 @@ from urllib.parse import unquote
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.views import View
 from django.views.decorators.http import require_GET
 
@@ -52,7 +52,8 @@ class Purchases(LoginRequiredMixin, View):
     def post(self, request):
         recipe_id = json.loads(request.body).get('id')
         recipe = get_object_or_404(Recipe, id=recipe_id)
-        purchase = Purchase.purchase.get_or_create_purchase(user=request.user)
+        purchase = Purchase.purchase.get_or_create_purchase(
+            user=request.user)
 
         if not purchase.recipes.filter(id=recipe_id).exists():
             purchase.recipes.add(recipe)

@@ -41,7 +41,7 @@ class PurchaseManager(models.Manager):
         try:
             return super().get_queryset().get(user=user)
         except ObjectDoesNotExist:
-            purchase = Purchase(user=user, recipe=recipe)
+            purchase = Purchase(user=user)
             purchase.save()
             return purchase
 
