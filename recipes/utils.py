@@ -1,4 +1,7 @@
+from django.shortcuts import get_object_or_404
 from taggit.models import Tag
+
+from .models import Ingredient, IngredientForRecipe
 
 
 def get_tags(request):
@@ -12,27 +15,43 @@ def get_tags(request):
     return [tags_qs, tags_from_get]
 
 
-def get_ingredients_from_form(data):
-    ingredients = {}
+# def save_recipe(ingredients, recipe):
+#     recipe_ingredients = []
 
-    for key, ingredient_name in request.POST.items():
-        if 'nameIngredient' in key:
-            _ = key.split('_')
-            ingredients[ingredient_name] = request.POST[
-                f'valueIngredient_{_[1]}'
-            ]
+#     for name, amount in ingredients.items():
+#         ingredient = get_object_or_404(Ingredient, name=name)
+#         rec_ingredient = IngredientForRecipe(
+#             amount=amount, ingredient=ingredient, recipe=recipe
+#         )
+#         recipe_ingredients.append(rec_ingredient)
 
+#     IngredientValue.objects.bulk_create(recipe_ingredients)
+
+
+def get_ingredients(data):
+    ingredient_numbers = set()
+    ingredients = []
+    for key in data:
+        if key.startswith('nameIngredient_'):
+            _, number = key.split('_')
+            ingredient_numbers.add(number)
+    for number in ingredient_numbers:
+        ingredients.append(
+            {
+                'name': data[f'nameIngredient_{number}'],
+                'unit': data[f'unitsIngredient_{number}'],
+                'amount': float(data[f'valueIngredient_{number}']),
+            }
+        )
     return ingredients
 
 
-def save_recipe(ingredients, recipe):
-    recipe_ingredients = []
-
-    for title, value in ingredients.items():
-        ingredient = get_object_or_404(Ingredient, title=title)
-        rec_ingredient = IngredientValue(
-            value=value, ingredient=ingredient, recipe=recipe
-        )
-        recipe_ingredients.append(rec_ingredient)
-
-    IngredientValue.objects.bulk_create(recipe_ingredients)
+def save_recipe(recipe, ingredients, request):
+    recipe.author = request.user
+    recipe.save()
+    for item in ingredients:
+        recipe_ing = IngredientForRecipe(
+            amount=item.get('amount'),
+            ingredient=Ingredient.objects.get(name=item.get('name')),
+            recipe=recipe)
+        recipe_ing.save()

@@ -1,5 +1,4 @@
 from django.core.exceptions import ValidationError
-
 from django.forms import ModelForm
 
 from .models import Recipe
@@ -22,4 +21,5 @@ class RecipeForm(ModelForm):
             value = self.data.get(f'valueIngredient_{id}')
 
             if int(value) <= 0:
-                raise ValidationError('Пожалуйста, добавьте хотя бы один ингредиент')
+                raise ValidationError(
+                    'Пожалуйста, добавьте хотя бы один ингредиент')

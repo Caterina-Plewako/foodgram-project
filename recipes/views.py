@@ -12,7 +12,7 @@ from foodgram.settings import ITEMS_FOR_PAGINATOR
 
 from .forms import RecipeForm
 from .models import IngredientForRecipe, Recipe, User
-from .utils import get_ingredients_from_form, get_tags, save_recipe
+from .utils import get_tags, save_recipe, get_ingredients
 
 
 def index(request):
@@ -35,52 +35,42 @@ def index(request):
 
 @login_required
 def new_recipe(request):
-    form = RecipeForm(request.POST or None)
+    form = RecipeForm(request.POST or None, files=request.FILES or None)
 
     if form.is_valid():
         recipe = form.save(commit=False)
-        recipe.author = request.user
-        recipe.save()
-        save_recipe(ingredients=get_ingredients_from_form(request),
-                    recipe=recipe)
+        ingredients = get_ingredients(request.POST)
+        save_recipe(recipe, ingredients, request)
         form.save_m2m()
-        return redirect('recipe_view',
-                        username=request.user.username,
-                        recipe_id=recipe.id)
-
+        return redirect('index')
     return render(request, 'recipes/formRecipe.html', {'form': form})
 
 
 @login_required
 def recipe_edit(request, recipe_id, username):
-    recipe = get_object_or_404(Recipe, pk=recipe_id)
-
-    if request.user != recipe.author:
-        return redirect('recipe_view', username=username, recipe_id=recipe_id)
-
-    form = RecipeForm(request.POST or None,
-                      files=request.FILES or None,
+    recipe = get_object_or_404(Recipe, author__username=username, id=recipe_id)
+    ing = IngredientForRecipe.objects.filter(recipe=recipe_id)
+    form = RecipeForm(request.POST or None, files=request.FILES or None,
                       instance=recipe)
-    ingredients = IngredientForRecipe.objects.filter(recipe=recipe.id)
     tags = Tag.objects.all()
+    context = {'form': form, 'recipe': recipe,
+               'ingredients': ing, 'tags': tags}
 
-    if form.is_valid():
-        recipe = form.save(commit=False)
-        IngredientForRecipe.objects.filter(recipe=recipe.id).delete()
-        recipe.tags.remove()
-        save_recipe(ingredients=get_ingredients_from_form(request),
-                    recipe=recipe)
+    if recipe.author == request.user:
+        ingredients = get_ingredients(request.POST)
 
-        form.save_m2m()
-        return redirect('recipe_view',
-                        username=request.user.username,
+        if form.is_valid():
+            ing.delete()
+            recipe = form.save(commit=False)
+            save_recipe(recipe, ingredients, request)
+            form.save_m2m()
+            return redirect('recipe', username=request.user.username,
+                            recipe_id=recipe.id)
+
+        return render(request, 'recipes/formRecipe.html', context)
+    else:
+        return redirect('recipe', username=request.user.username,
                         recipe_id=recipe.id)
-
-    return render(request,
-                  'recipes/formRecipe.html',
-                  {'form': form, 'recipe': recipe,
-                   'ingredients': ingredients, 'tags': tags}
-                  )
 
 
 @login_required
