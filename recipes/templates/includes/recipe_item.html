@@ -9,14 +9,14 @@
         </a>
         <ul class="card__items">
             {% for tag in recipe.tags.all %}
-                {% if tag.name == 'Обед'%}
-                    <li class="card__item"><span class="badge badge_style_green">{{ tag.name }}</span></li>
+                {% if tag.name == '2'%}
+                    <li class="card__item"><span class="badge badge_style_green">Обед</span></li>
                 {% endif %}
-                {% if tag.name == 'Завтрак' %}
-                    <li class="card__item"><span class="badge badge_style_orange">{{ tag.name }}</span></li>
+                {% if tag.name == '1' %}
+                    <li class="card__item"><span class="badge badge_style_orange">Завтрак</span></li>
                 {% endif %}
-                {% if tag.name == 'Ужин' %}
-                    <li class="card__item"><span class="badge badge_style_purple">{{ tag.name }}</span></li>
+                {% if tag.name == '3' %}
+                    <li class="card__item"><span class="badge badge_style_purple">Ужин</span></li>
                 {% endif %}
             {% endfor %}
         </ul>

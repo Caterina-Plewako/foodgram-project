@@ -26,12 +26,12 @@
                         <a href="{% url 'recipe' recipe.author.username recipe.id %}" class="link" target="_blank"><h3 class="recipe__title">{{ recipe.title }}</h3></a>
                         <p class="recipe__text"><span class="icon-time"></span> {{ recipe.cooking_time }} мин.</p>
                     </div>
-                    <a href="{% url 'delete_purchase' recipe.id %}" class="shopping-list__button link">Удалить</a>
+                    <button class="shopping-list__button link">Удалить</button>
                 </li>
             {% endfor %}
         </ul>
         {% if recipes_list %}
-            <a href="{% url 'download_shoplist' %}"><button class="button button_style_blue">Скачать список</button></a>
+            <a href="{% url 'download_shoplist' %}" target="_blank"><button class="button button_style_blue">Скачать список</button></a>
         {% endif %}
     </div>
 {% endblock %}

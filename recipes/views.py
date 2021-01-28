@@ -34,6 +34,7 @@ def index(request):
 @login_required
 def new_recipe(request):
     form = RecipeForm(request.POST or None, files=request.FILES or None)
+    tags = Tag.objects.all()
 
     if form.is_valid():
         recipe = form.save(commit=False)
@@ -41,7 +42,7 @@ def new_recipe(request):
         save_recipe(recipe, ingredients, request)
         form.save_m2m()
         return redirect('index')
-    return render(request, 'recipes/formRecipe.html', {'form': form})
+    return render(request, 'recipes/formRecipe.html', {'form': form, 'tags': tags})
 
 
 @login_required

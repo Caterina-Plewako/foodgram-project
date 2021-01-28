@@ -20,6 +20,6 @@ class RecipeForm(ModelForm):
         for id in known_ids:
             value = self.data.get(f'valueIngredient_{id}')
 
-            if int(value) <= 0:
+            if float(value) <= 0:
                 raise ValidationError(
                     'Пожалуйста, добавьте хотя бы один ингредиент')

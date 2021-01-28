@@ -35,41 +35,23 @@
                 <p class="form__label">Теги</p>
                 <div class="form__field-group">
                     <div class="tags">
-                        {% if recipe %}
-                            {% for tag in tags %}
-                                {% if tag.name == 'Завтрак' %}
-                                    <input type="checkbox" name="tags" value="{{ tag.id }}" id="id_{{ tag.name }}"
-                                        class="tags__checkbox tags__checkbox_style_orange" {% if tag in recipe.tags.all %}checked{% endif %}>
-                                    <label for="id_tag_{{ tag.id }}" class="tags__label">{{ tag.name }} </label>
-                                {% endif %}
-                                {% if tag.name == 'Обед' %}
-                                    <input type="checkbox" name="tags" value="{{ tag.id }}" id="id_{{ tag.name }}"
-                                        class="tags__checkbox tags__checkbox_style_green" {% if tag in recipe.tags.all %}checked{% endif %}>
-                                    <label for="id_tag_{{ tag.id }}" class="tags__label">{{ tag.name }} </label>
-                                {% endif %}
-                                {% if tag.name == 'Ужин' %}
-                                    <input type="checkbox" name="tags" value="{{ tag.id }}" id="id_{{ tag.name }}"
-                                        class="tags__checkbox tags__checkbox_style_purple" {% if tag in recipe.tags.all %}checked{% endif %}>
-                                    <label for="id_tag_{{ tag.id }}" class="tags__label">{{ tag.name }} </label>
-                                {% endif %}
-                            {% endfor %}
-                        {% else %}
-                            <li class="tags__item">
-                                <input type="checkbox" name="tags" id="id_breakfast"
-                                    class="tags__checkbox tags__checkbox_style_orange">
-                                    <label for="id_tag_breakfast" class="tags__label">Завтрак </label>
-                            </li>
-                            <li class="tags__item">
-                                <input type="checkbox" name="tags" id="id_lunch"
-                                    class="tags__checkbox tags__checkbox_style_green">
-                                <label for="id_tag_lunch" class="tags__label">Обед </label>
-                            </li>
-                            <li class="tags__item">
-                                <input type="checkbox" name="tags" id="id_dinner"
-                                    class="tags__checkbox tags__checkbox_style_purple">
-                                <label for="id_tag_dinner" class="tags__label">Ужин </label>
-                            </li>
-                        {% endif %}
+                        {% for tag in tags %}
+                            {% if tag.name == 'Завтрак' %}
+                                <input type="checkbox" name="tags" value="{{ tag.id }}" id="id_{{ tag.name }}"
+                                    class="tags__checkbox tags__checkbox_style_orange" {% if tag in recipe.tags.all %}checked{% endif %}>
+                                <label for="id_tag_{{ tag.name }}" class="tags__label">{{ tag.name }} </label>
+                            {% endif %}
+                            {% if tag.name == 'Обед' %}
+                                <input type="checkbox" name="tags" value="{{ tag.id }}" id="id_{{ tag.name }}"
+                                    class="tags__checkbox tags__checkbox_style_green" {% if tag in recipe.tags.all %}checked{% endif %}>
+                                <label for="id_tag_{{ tag.id }}" class="tags__label">{{ tag.name }} </label>
+                            {% endif %}
+                            {% if tag.name == 'Ужин' %}
+                                <input type="checkbox" name="tags" value="{{ tag.id }}" id="id_{{ tag.name }}"
+                                    class="tags__checkbox tags__checkbox_style_purple" {% if tag in recipe.tags.all %}checked{% endif %}>
+                                <label for="id_tag_{{ tag.id }}" class="tags__label">{{ tag.name }} </label>
+                            {% endif %}
+                        {% endfor %}
                     </div>
                     {% if form.errors %}
                         {% for error in form.tags.errors %}
@@ -96,9 +78,9 @@
                         <div class="form__field-item-ingredient" id="ing_{{ ing.ingredient.id }}">
                             <span> {{ ing.ingredient.name }} {{ ing.amount }} {{ ing.ingredient.unit }}</span>
                             <span class="form__field-item-delete"></span>
-                            <input id="nameIngredient_{{ ing.id }}" name="nameIngredient_{{ ing.id }}" type="hidden" value="{{ ing.ingredient.title }}">
-                            <input id="valueIngredient_{{ ing.id }}" name="valueIngredient_{{ ing.id }}" type="hidden" value="{{ ing.amount }}">
-                            <input id="unitsIngredient_{{ ing.id }}" name="unitsIngredient_{{ ing.id }}" type="hidden" value="{{ ing.ingredient.unit }}">
+                            <input id="nameIngredient_{{ ing.name }}" name="nameIngredient_{{ ing.id }}" type="hidden" value="{{ ing.ingredient.name }}">
+                            <input id="amountIngredient_{{ ing.amount }}" name="valueIngredient_{{ ing.id }}" type="hidden" value="{{ ing.amount }}">
+                            <input id="unitsIngredient_{{ ing.unit }}" name="unitsIngredient_{{ ing.id }}" type="hidden" value="{{ ing.ingredient.unit }}">
                         </div>
                         {% endfor %}
                     {% endif %}
