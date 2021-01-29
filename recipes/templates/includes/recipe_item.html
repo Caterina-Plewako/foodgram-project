@@ -27,14 +27,14 @@
         </div>
     </div>
     <div class="card__footer">
-        {% load recipe_filters %}
-        {% if recipe.id|recipe_in_purchases:user.id %}
-            <button class="button button_style_light-blue-outline" name="purchases"><span class="icon-check button__icon"></span> Рецепт добавлен</button>
-        {% else %}
-            <button class="button button_style_light-blue" name="purchases" data-out><span class="icon-plus button__icon"></span>Добавить в покупки</button>
-        {% endif %}
-
         {% if user.is_authenticated %}
+            {% load recipe_filters %}
+            {% if recipe.id|recipe_in_purchases:user.id %}
+                <button class="button button_style_light-blue-outline" name="purchases"><span class="icon-check button__icon"></span> Рецепт добавлен</button>
+            {% else %}
+                <button class="button button_style_light-blue" name="purchases" data-out><span class="icon-plus button__icon"></span>Добавить в покупки</button>
+            {% endif %}
+
             {% load filters %}
             {% csrf_token %}
             {% if recipe.id|is_favorite:user.id %}

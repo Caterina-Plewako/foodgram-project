@@ -31,7 +31,6 @@ def get_ingredients(data):
                 'amount': float(data[f'valueIngredient_{number}']),
             }
         )
-        print(ingredients)
     return ingredients
 
 
