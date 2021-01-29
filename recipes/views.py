@@ -134,7 +134,7 @@ def favorites(request, username):
     tags_qs, tags_from_get = get_tags(request)
 
     if tags_qs:
-        recipes = Recipe.objects.filter(favorite_recipe__user=request.user,
+        recipes = Recipe.objects.filter(favourites__user=request.user,
                                         tags__slug__in=tags_qs).distinct()
 
     paginator = Paginator(recipes, ITEMS_FOR_PAGINATOR)
