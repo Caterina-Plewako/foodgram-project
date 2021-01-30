@@ -13,6 +13,7 @@ jobs:
        host: ${{ secrets.HOST }}
        username: ${{ secrets.USER }}
        key: ${{ secrets.SSH_KEY }}
+       passphrase: ${{ secrets.PASSPHRASE }} 
        script: |
          sudo docker pull caterinaplevako/foodgram:latest
          sudo docker-compose stop $(sudo docker ps -a -q)
