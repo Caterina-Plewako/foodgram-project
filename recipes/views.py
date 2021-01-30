@@ -90,7 +90,8 @@ def recipe_delete(request, recipe_id, username):
 def recipe_view(request, username, recipe_id):
     recipe = get_object_or_404(Recipe, author__username=username, id=recipe_id)
     ingredients = recipe.recipeingredient.all()
-    return render(request, 'recipes/recipe_view.html', {'author': username, 'recipe': recipe,
+    return render(request, 'recipes/recipe_view.html', {'author': username,
+                                                        'recipe': recipe,
                                                         'ingredients': ingredients})
 
 

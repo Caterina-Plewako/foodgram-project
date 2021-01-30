@@ -1,7 +1,5 @@
 from taggit.models import Tag
 
-from django.shortcuts import get_object_or_404
-
 from .models import Ingredient, IngredientForRecipe
 
 
@@ -38,15 +36,6 @@ def save_recipe(recipe, ingredients, request):
     recipe.author = request.user
     recipe.save()
     recipe_ingredients = []
-
-    # for name, amount in ingredients.items():
-    #     ingredient = get_object_or_404(Ingredient, name=name)
-    #     rec_ingredient = IngredientForRecipe(
-    #         amount=amount, ingredient=ingredient, recipe=recipe
-    #     )
-    #     recipe_ingredients.append(rec_ingredient)
-
-    # IngredientForRecipe.objects.bulk_create(recipe_ingredients)
 
     for item in ingredients:
         recipe_ing = IngredientForRecipe(
