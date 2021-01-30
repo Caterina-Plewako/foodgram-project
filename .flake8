@@ -2,7 +2,11 @@
 exclude =
    .git,
    *migrations*,
+   *settings*,
    venv,
    static,
+   tests,
+   tests.py,
    manage.py,
 max-line-length = 79
+max-complexity = 10
