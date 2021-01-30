@@ -116,7 +116,9 @@ def profile(request, username):
 @login_required
 def subscriptions(request, username):
     user = get_object_or_404(User, username=username)
-    subscriptions = Subscription.objects.filter(user=user)
+    subscriptions = User.objects.prefetch_related('recipes').filter(
+        following__user=user.id)
+    print(subscriptions)
     paginator = Paginator(subscriptions, ITEMS_FOR_PAGINATOR)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)

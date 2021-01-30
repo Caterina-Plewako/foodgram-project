@@ -22,33 +22,31 @@
         {% for subscription in page %}
             <div class="card-user" data-author="{{ subscription.id }}">
                 <div class="card-user__header">
-                    <h2 class="card-user__title">{{ subscription.author.username }}</h2>
+                    <h2 class="card-user__title">{{ subscription.username }}</h2>
                 </div>
             <div class="card-user__body">
 
-            {% for recipe in subscription.author.recipes.all|slice:':3' %}
+            {% for recipe in subscription.recipes.all|slice:':3' %}
                 <ul class="card-user__items">
                     <li class="card-user__item">
                         <div class="recipe">
                             <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe__image">
-                            <h3 class="recipe__title">{{ recipe.title }}</h3>
-                            <p class="recipe__text"><span class="icon-time"></span> {{ recipe.cooking_time }}</p>
+                            <a href={% url 'recipe' recipe.author recipe.id %}><h3 class="recipe__title">{{ recipe.title }}</h3></a>
+                            <p class="recipe__text"><span class="icon-time"></span> {{ recipe.cooking_time }} мин.</p>
                         </div>
                     </li>
                 </ul>
             {% endfor %}
 
-            {% if subscription.author.recipes.all|length > 3 %}
+            {% if subscription.recipes.all|length > 3 %}
                 <li class="card-user__item">
-                    <a href="{% url 'profile' subscription.author.username %}" class="card-user__link link">Еще {{ subscription.author.recipes.all|length|add:'-3'}} {{ subscription.author.recipes.all|length|add:'-3'|plural_recipes }}...</a>
+                    <a href="{% url 'profile' subscription.username %}" class="card-user__link link">Еще {{ subscription.recipes.all|length|add:'-3'}} {{ subscription.recipes.all|length|add:'-3'|plural_recipes }}...</a>
                 </li>
             {% endif %}
         </div>
-        {% if page %}
-            <div class="card-user__footer">
-                <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться</button>
-            </div>
-        {% endif %}
+        <div class="card-user__footer">
+            <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться</button>
+        </div>
         {% endfor %}
         </div>
     </div>
