@@ -13,7 +13,7 @@
 
 {% block content %}
 
-    <div class="single-card" data-id="{{ recipe.id }}">
+    <div class="single-card" data-id="{{ recipe.id }}" data-author="{{ recipe.author.id }}">
         {% thumbnail recipe.image "470x500" crop="center" upscale=True as im %}
         <img class="card-img" src="{{ im.url }}">
         {% endthumbnail %}
@@ -50,7 +50,7 @@
             <div class="single-card__items single-card__items_column">
                 <p class="single-card__text"><span class="icon-time"></span> {{ recipe.cooking_time }} мин.</p>
                 <ul class="single-card__items">
-                    <p class="single-card__text"><span class="icon-user"></span> {{ author }}</p>
+                    <p class="single-card__text"><span class="icon-user"></span> {{ recipe.author }}</p>
                     {% if recipe.author == user %}
                         <li class="single-card__item"> <a style="margin-left: 2.5em"
                                 href="{% url 'recipe_edit' recipe.author.username recipe.id %}"
@@ -65,10 +65,8 @@
                 {% else %}
                     <button class="button button_style_light-blue" name="purchases" data-out><span class="icon-plus button__icon"></span>Добавить в покупки</button>
                 {% endif %}
-                {% if user != author %}
-                    <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe"
-                        name="subscribe" {% if recipe.author|is_subscribed:user.id %}>Отписаться от автора
-                        {% else %}data-out>Подписаться на автора{% endif %}</button></li>
+                {% if user.is_authenticated and user != recipe.author %}
+                    <button class="button button_style_light-blue button_size_subscribe" name="subscribe" {% if recipe.author|is_subscribed:user.id %}>Отписаться от автора{% else %}data-out>Подписаться на автора{% endif %}</button>
                 {% endif %}
             </ul>
                 <div class="single-card__section">
